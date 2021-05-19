@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bfe822a5-0b3b-41d0-a1db-f58bfe689671" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementação padrão de layout.txt" beforeDir="false" afterPath="$PROJECT_DIR$/implementação padrão de layout.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java/godev/src/main/java/br/com/searchdevelopers/godev/domain/Experience.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/godev/src/main/java/br/com/searchdevelopers/godev/domain/Experience.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java/godev/src/main/java/br/com/searchdevelopers/godev/usecases/FileUpload.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/godev/src/main/java/br/com/searchdevelopers/godev/usecases/FileUpload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java/godev/src/main/java/br/com/searchdevelopers/godev/usecases/ImportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/godev/src/main/java/br/com/searchdevelopers/godev/usecases/ImportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java/godev/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/java/godev/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +23,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectId" id="1sUEX1wXTA4loDfHY4XCHddgp9f" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -39,13 +35,13 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunManager">
     <configuration name="GodevApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -68,6 +64,7 @@
       <workItem from="1620939692713" duration="3676000" />
       <workItem from="1620945367797" duration="9399000" />
       <workItem from="1620956146622" duration="209000" />
+      <workItem from="1621442642653" duration="384000" />
     </task>
     <servers />
   </component>
