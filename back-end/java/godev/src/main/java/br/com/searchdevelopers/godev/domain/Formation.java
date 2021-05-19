@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 public class Formation {
@@ -44,19 +43,14 @@ public class Formation {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
-    private Users users;
+    private User user;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Formation formation = (Formation) o;
-        return Objects.equals(idFormation, formation.idFormation) && Objects.equals(nameInstitution, formation.nameInstitution) && Objects.equals(course, formation.course) && Objects.equals(languageFormation, formation.languageFormation) && Objects.equals(startDateFormation, formation.startDateFormation) && Objects.equals(endDateFormation, formation.endDateFormation) && Objects.equals(users, formation.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idFormation, nameInstitution, course, languageFormation, startDateFormation, endDateFormation, users);
+    public Formation(String nameInstitution, String course, String languageFormation, LocalDate startDateFormation, LocalDate endDateFormation) {
+        this.nameInstitution = nameInstitution;
+        this.course = course;
+        this.languageFormation = languageFormation;
+        this.startDateFormation = startDateFormation;
+        this.endDateFormation = endDateFormation;
     }
 
     public Integer getIdFormation() {
@@ -107,11 +101,11 @@ public class Formation {
         this.endDateFormation = endDateFormation;
     }
 
-    public Users getUsers() {
-        return users;
+    public User getUsers() {
+        return user;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsers(User user) {
+        this.user = user;
     }
 }
