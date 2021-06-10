@@ -134,17 +134,6 @@ public class UserController {
     user.setPhoto(path);
     repository.save(user);
     return ResponseEntity.status(201).build();
-//        try {
-//            Photo photo = new Photo();
-//            photo.setUsers(users.get());
-//            photo.setNamePhoto(file.getOriginalFilename());
-//            photo.setPhotoContent(file.getBytes());
-//            photoRepository.save(photo);
-//
-//            return ResponseEntity.created(null).build();
-//        } catch (BusinessRuleException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
   }
 
   @GetMapping("/file/{id}")
