@@ -43,7 +43,7 @@ public class Formation {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
-    private User user;
+    private Users users;
 
     public Formation(String nameInstitution, String course, String languageFormation, LocalDate startDateFormation, LocalDate endDateFormation) {
         this.nameInstitution = nameInstitution;
@@ -51,6 +51,9 @@ public class Formation {
         this.languageFormation = languageFormation;
         this.startDateFormation = startDateFormation;
         this.endDateFormation = endDateFormation;
+    }
+
+    public Formation() {
     }
 
     public Integer getIdFormation() {
@@ -101,11 +104,24 @@ public class Formation {
         this.endDateFormation = endDateFormation;
     }
 
-    public User getUsers() {
-        return user;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUsers(User user) {
-        this.user = user;
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "Formation{" +
+                "idFormation=" + idFormation +
+                ", nameInstitution='" + nameInstitution + '\'' +
+                ", course='" + course + '\'' +
+                ", languageFormation='" + languageFormation + '\'' +
+                ", startDateFormation=" + startDateFormation +
+                ", endDateFormation=" + endDateFormation +
+                ", users=" + users +
+                '}';
     }
 }

@@ -1,7 +1,7 @@
 package br.com.searchdevelopers.godev.controller.profile;
 
 import br.com.searchdevelopers.godev.domain.Formation;
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.exceptions.BusinessRuleException;
 import br.com.searchdevelopers.godev.repository.FormationRepository;
 import br.com.searchdevelopers.godev.usecases.RegisterUser;
@@ -31,7 +31,7 @@ public class FormationController {
     public ResponseEntity postFormation(@Valid @RequestBody Formation formation,
                                     @PathVariable Integer id) {
         try {
-            Optional<User> users = registerUser.findByIdUser(id);
+            Optional<Users> users = registerUser.findByIdUser(id);
             formation.setUsers(users.get());
             repository.save(formation);
 
@@ -44,17 +44,17 @@ public class FormationController {
     @GetMapping(path = "/{id}")
     public ResponseEntity findByIdFormation(@PathVariable Integer id) {
         if(repository.findById(id).isEmpty()){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(repository.findById(id));
     }
 
     @GetMapping(path = "/user/{id}")
     public ResponseEntity findByIdFormationIdUser(@PathVariable Integer id) {
-        if(repository.findByUserIdUser(id).isEmpty()){
-            return ResponseEntity.badRequest().build();
+        if(repository.findByUsersIdUser(id).isEmpty()){
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(repository.findByUserIdUser(id));
+        return ResponseEntity.ok(repository.findByUsersIdUser(id));
     }
 
     @GetMapping

@@ -108,6 +108,8 @@ public class Service {
         return startDateService;
     }
 
+    public LocalDate getStartDateServiceCharSequence(){return startDateService;}
+
     public void setStartDateService(LocalDate startDateService) {
         this.startDateService = startDateService;
     }

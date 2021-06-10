@@ -3,8 +3,12 @@ package br.com.searchdevelopers.godev.usecases.importupload;
 
 import br.com.searchdevelopers.godev.domain.Experience;
 import br.com.searchdevelopers.godev.domain.Formation;
+import br.com.searchdevelopers.godev.dto.FormationExperienceDto;
 import br.com.searchdevelopers.godev.repository.ExperienceRepository;
 import br.com.searchdevelopers.godev.repository.FormationRepository;
+import br.com.searchdevelopers.godev.usecases.fila.FilaObj;
+import br.com.searchdevelopers.godev.usecases.pilha.PilhaObj;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,14 +37,12 @@ public class FileUploadController {
     private ExperienceRepository experienceRepository;
 
     @Autowired
-    FormationRepository formationRepository;
+    private FormationRepository formationRepository;
+
 
     @PostMapping
     public ResponseEntity criarArquivo(@RequestParam MultipartFile arquivo) throws IOException {
         ImportService importService = new ImportService();
-
-        List<Experience> lista = importService.listaExperiencia;
-        List<Formation> listaFormacao = importService.listaFormacao;
 
         if (arquivo.isEmpty()){
             return ResponseEntity.status(400).body("Arquivo não enviado");
@@ -48,16 +56,44 @@ public class FileUploadController {
         Path path = Paths.get(arquivo.getOriginalFilename());
         Files.write(path, conteudo);
 
-        for (Experience e : lista){
-            experienceRepository.save(e);
-        }
+        List<Object> formationExperienceDtoList1 = importService.leArquivo(arquivo.getOriginalFilename());
 
-        for (Formation f : listaFormacao){
-            formationRepository.save(f);
-        }
 
-        importService.leArquivo(arquivo.getOriginalFilename());
-        return ResponseEntity.status(201).body(importService.listaExperiencia);
+
+        for (Object e : formationExperienceDtoList1){
+            if (e.getClass().equals(Experience.class)){
+
+                Experience experience = new Experience(((Experience) e).getNameCompany(),
+                        ((Experience) e).getStartDateExperience(),
+                        ((Experience) e).getEndDateExperience(),
+                        ((Experience) e).getDescriptionExperience(),
+                        ((Experience) e).getPosition(),
+                        ((Experience) e).getFunctions(),
+                        ((Experience) e).getLocality());
+                experienceRepository.save(experience);
+                System.out.println(experience);
+
+            }
+            else {
+
+                Formation formation = new Formation(((Formation) e).getNameInstitution(),
+                        ((Formation) e).getCourse(),
+                        ((Formation) e).getLanguageFormation(),
+                        ((Formation) e).getStartDateFormation(),
+                        ((Formation) e).getEndDateFormation());
+                formationRepository.save(formation);
+            }
+
+
+
+            }
+
+
+        return ResponseEntity.status(201).body(formationExperienceDtoList1);
     }
+
+
+
+
 
 }

@@ -1,13 +1,12 @@
 package br.com.searchdevelopers.godev.usecases;
 
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.exceptions.AuthenticationErrorException;
 import br.com.searchdevelopers.godev.exceptions.BusinessRuleException;
 import br.com.searchdevelopers.godev.exceptions.SearchErrorException;
 import br.com.searchdevelopers.godev.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,8 +21,8 @@ public class RegisterUser {
         this.repository = repository;
     }
 
-    public User authenticate (String email, String password){
-        Optional<User> users = repository.findByEmail(email);
+    public Users authenticate (String email, String password){
+        Optional<Users> users = repository.findByEmail(email);
         if(!users.isPresent()){
             throw new AuthenticationErrorException("Usuário não encontrado");
         }
@@ -33,13 +32,14 @@ public class RegisterUser {
         return users.get();
     }
 
-    @Transactional
-    public User saveUser(User user){
-        validateEmail(user.getEmail());
-        user.setStars(0.0);
-        user.setXp(0);
-        user.setStatus(true);
-        return repository.save(user);
+    public Users saveUser(Users users){
+        validateEmail(users.getEmail());
+        users.setStarsUser(0.0);
+        users.setRatingsCont(0);
+        users.setRatingsSum(0.0);
+        users.setXp(0);
+        users.setStatus(true);
+        return repository.save(users);
     }
 
     public void validateEmail(String email){
@@ -49,7 +49,7 @@ public class RegisterUser {
         }
     }
 
-    public Optional<User> findByIdUser (Integer id) {
+    public Optional<Users> findByIdUser (Integer id) {
         if(repository.findById(id).isEmpty()){
             throw new SearchErrorException("Usuário não encontrado com esse id informado.");
         }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FormationRepository extends JpaRepository<Formation,Integer> {
 
-    List<Formation> findByUserIdUser(Integer idUser);
+    List<Formation> findByUsersIdUser(Integer idUser);
 }

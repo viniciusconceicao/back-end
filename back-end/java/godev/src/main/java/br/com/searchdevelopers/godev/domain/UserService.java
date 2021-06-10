@@ -11,11 +11,11 @@ public class UserService {
 
     @ManyToOne
     @JoinColumn(name = "users_dev_id")
-    private User userDev;
+    private Users usersDev;
 
     @ManyToOne
     @JoinColumn(name = "users_clt_id")
-    private User userClt;
+    private Users usersClt;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
@@ -29,20 +29,20 @@ public class UserService {
         this.idUserService = idUserService;
     }
 
-    public User getUserDev() {
-        return userDev;
+    public Users getUserDev() {
+        return usersDev;
     }
 
-    public void setUserDev(User userDev) {
-        this.userDev = userDev;
+    public void setUserDev(Users usersDev) {
+        this.usersDev = usersDev;
     }
 
-    public User getUserClt() {
-        return userClt;
+    public Users getUserClt() {
+        return usersClt;
     }
 
-    public void setUserClt(User userClt) {
-        this.userClt = userClt;
+    public void setUserClt(Users usersClt) {
+        this.usersClt = usersClt;
     }
 
     public Service getService() {

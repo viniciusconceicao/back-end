@@ -11,13 +11,17 @@ public class Favorite {
 
     @ManyToOne
     @JoinColumn(name = "users_dev_id")
-    private User userDev;
+    private Users usersDev;
 
     @ManyToOne
     @JoinColumn(name = "users_clt_id")
-    private User userClt;
+    private Users usersClt;
 
     private Boolean favorite;
+
+    public String getUserCltStringRole(){
+        return usersClt.getRole();
+    }
 
     public Integer getIdFavorite() {
         return idFavorite;
@@ -27,20 +31,20 @@ public class Favorite {
         this.idFavorite = idFavorite;
     }
 
-    public User getUserDev() {
-        return userDev;
+    public Users getUserDev() {
+        return usersDev;
     }
 
-    public void setUserDev(User userDev) {
-        this.userDev = userDev;
+    public void setUserDev(Users usersDev) {
+        this.usersDev = usersDev;
     }
 
-    public User getUserClt() {
-        return userClt;
+    public Users getUserClt() {
+        return usersClt;
     }
 
-    public void setUserClt(User userClt) {
-        this.userClt = userClt;
+    public void setUserClt(Users usersClt) {
+        this.usersClt = usersClt;
     }
 
     public Boolean getFavorite() {

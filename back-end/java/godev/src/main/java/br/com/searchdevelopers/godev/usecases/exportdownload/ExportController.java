@@ -1,7 +1,7 @@
 package br.com.searchdevelopers.godev.usecases.exportdownload;
 
 
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +29,7 @@ public class ExportController {
     @GetMapping(value = "/users/{tipoArquivo}")
     public ResponseEntity<String> exportUserCSV(HttpServletResponse response, @PathVariable String tipoArquivo) {
         SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy_HH-mm");
-        List<User> lista = repository.findAll();
+        List<Users> lista = repository.findAll();
         String corpo = service.exportUsers(lista, tipoArquivo);
         String nome = String.format("usuarios_%s.%s", formato.format(new Date(System.currentTimeMillis())), tipoArquivo.equals("csv") ? "csv":"txt");
 

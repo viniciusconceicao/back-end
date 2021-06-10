@@ -1,7 +1,7 @@
 package br.com.searchdevelopers.godev.controller.profile;
 
 import br.com.searchdevelopers.godev.domain.Language;
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.exceptions.BusinessRuleException;
 import br.com.searchdevelopers.godev.repository.LanguageRepository;
 import br.com.searchdevelopers.godev.usecases.RegisterUser;
@@ -31,7 +31,7 @@ public class LanguageController {
     public ResponseEntity postLanguage(@Valid @RequestBody Language language,
                                          @PathVariable Integer id) {
         try {
-            Optional<User> users = registerUser.findByIdUser(id);
+            Optional<Users> users = registerUser.findByIdUser(id);
             language.setUsers(users.get());
             repository.save(language);
 
@@ -51,10 +51,10 @@ public class LanguageController {
 
     @GetMapping(path = "/user/{id}")
     public ResponseEntity findByIdLanguageIdUser(@PathVariable Integer id) {
-        if(repository.findByUserIdUser(id).isEmpty()){
+        if(repository.findByUsersIdUser(id).isEmpty()){
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repository.findByUserIdUser(id));
+        return ResponseEntity.ok(repository.findByUsersIdUser(id));
     }
 
     @GetMapping

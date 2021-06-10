@@ -1,6 +1,6 @@
 package br.com.searchdevelopers.godev.usecases.exportdownload;
 
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.usecases.ListaObj;
 
 import java.io.FileWriter;
@@ -12,7 +12,7 @@ import java.util.FormatterClosedException;
 
 public class ExportacaoLayoutUsuario {
 
-    public void executar(ListaObj<User> list) {
+    public void executar(ListaObj<Users> list) {
         FileWriter arq = null;
         Formatter saida = null;
         StringBuilder conteudo;
@@ -36,20 +36,20 @@ public class ExportacaoLayoutUsuario {
         conteudo.append(String.format("%s%-8s%-19s%02d%n", "00", "USUÁRIOS", now.format(dateTimeFormatter), 1));
         try {
             for (int i = 0; i < list.getTamanho(); i++) {
-                User user = new User();
-                nome = user.getNameUser();
-                email = user.getEmail();
-                telefone = user.getPhone();
-                tipoUsuario = user.getRole();
+                Users users = new Users();
+                nome = users.getNameUser();
+                email = users.getEmail();
+                telefone = users.getPhone();
+                tipoUsuario = users.getRole();
 
-                if (!(user.getCnpj() == null)) {
+                if (!(users.getCnpj() == null)) {
                     tipoDocumento = "01";
-                    nroDocumento = user.getCnpj();
+                    nroDocumento = users.getCnpj();
 
 
                 } else {
                     tipoDocumento = "02";
-                    nroDocumento = user.getCpf();
+                    nroDocumento = users.getCpf();
                 }
 
                 registros++;

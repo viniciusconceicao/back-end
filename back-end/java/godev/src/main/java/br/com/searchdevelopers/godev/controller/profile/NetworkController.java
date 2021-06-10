@@ -1,9 +1,8 @@
 package br.com.searchdevelopers.godev.controller.profile;
 
 import br.com.searchdevelopers.godev.domain.Network;
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.exceptions.BusinessRuleException;
-import br.com.searchdevelopers.godev.exceptions.SearchErrorException;
 import br.com.searchdevelopers.godev.repository.NetworkRepository;
 import br.com.searchdevelopers.godev.usecases.RegisterUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
+
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/api/networks")
@@ -30,8 +31,8 @@ public class NetworkController {
     public ResponseEntity postNetwork(@Valid @RequestBody Network network,
                                     @PathVariable Integer id) {
         try {
-            Optional<User> users = registerUser.findByIdUser(id);
-            network.setUser(users.get());
+            Optional<Users> users = registerUser.findByIdUser(id);
+            network.setUsers(users.get());
             networkRepository.save(network);
 
             return ResponseEntity.ok(network);
@@ -41,19 +42,31 @@ public class NetworkController {
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<Network> findByIdNetwork(@PathVariable Integer id) {
+    public ResponseEntity findByIdNetwork(@PathVariable Integer id) {
         if(networkRepository.findById(id).isEmpty()){
-            throw new SearchErrorException("Network não encontrado com esse id informado.");
+            return ResponseEntity.noContent().build();
         }
-        return networkRepository.findById(id);
+        return ResponseEntity.ok().body(networkRepository.findById(id));
     }
 
     @GetMapping(path = "/user/{id}")
     public ResponseEntity findByIdNetworkIdUser(@PathVariable Integer id) {
         if(networkRepository.existsById(id)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(networkRepository.findByUserIdUser(id));
+        return ResponseEntity.ok().body(networkRepository.getOne(id));
+        //Foi alterado para realizar um teste, para voltar como estava é só colar no return e descomentar
+        //o find que está na network repository
+        //networkRepository.findByUsersIdUser(id)
+    }
+
+    @GetMapping("/")
+    public ResponseEntity getAllNetwork(){
+        if (networkRepository.findAll().isEmpty()){
+            return status(204).build();
+        } else {
+            return ResponseEntity.ok(networkRepository.findAll());
+        }
     }
 
     @PutMapping(path = "/{id}")

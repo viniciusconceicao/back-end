@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ToolRepository extends JpaRepository<Tool,Integer> {
 
-    List<Tool> findByUserIdUser(Integer id);
+    List<Tool> findByUsersIdUser(Integer id);
 }

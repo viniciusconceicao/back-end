@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ExperienceRepository extends JpaRepository<Experience,Integer> {
 
-    List<Experience> findByUserIdUser(Integer idUser);
+    List<Experience> findByUsersIdUser(Integer idUser);
 }

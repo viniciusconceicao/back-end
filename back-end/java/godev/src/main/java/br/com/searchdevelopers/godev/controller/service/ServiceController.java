@@ -1,30 +1,47 @@
 package br.com.searchdevelopers.godev.controller.service;
 
+import br.com.searchdevelopers.godev.domain.Notification;
 import br.com.searchdevelopers.godev.domain.Service;
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.domain.UserService;
 import br.com.searchdevelopers.godev.exceptions.BusinessRuleException;
 import br.com.searchdevelopers.godev.repository.ServiceRepository;
+import br.com.searchdevelopers.godev.repository.UserRepository;
 import br.com.searchdevelopers.godev.repository.UserServiceRepository;
+import br.com.searchdevelopers.godev.usecases.AsyncFilaService;
 import br.com.searchdevelopers.godev.usecases.RegisterService;
 import br.com.searchdevelopers.godev.usecases.RegisterUser;
+import br.com.searchdevelopers.godev.usecases.fila.FilaObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+@EnableAsync
 @RestController
 @RequestMapping("/api/services")
 public class ServiceController {
 
+
+
+
     @Autowired
-    private ServiceRepository repository;
+    private ServiceRepository serviceRepository;
 
     @Autowired
     private UserServiceRepository userServiceRepository;
+
+    @Autowired
+    private AsyncFilaService asyncFilaService;
 
     private final RegisterService registerService;
     private final RegisterUser registerUser;
@@ -40,8 +57,8 @@ public class ServiceController {
                                        @RequestBody Service service) {
         try{
             UserService userService = new UserService();
-            Optional<User> userClt = registerUser.findByIdUser(idClt);
-            Optional<User> userDev = registerUser.findByIdUser(idDev);
+            Optional<Users> userClt = registerUser.findByIdUser(idClt);
+            Optional<Users> userDev = registerUser.findByIdUser(idDev);
 
             userService.setUserClt(userClt.get());
             userService.setUserDev(userDev.get());
@@ -56,14 +73,30 @@ public class ServiceController {
         }
     }
 
+
+    @Async
+    @Scheduled(cron = "* * 4 * * *")
+    public void asyncFila(){
+
+        if (!userServiceRepository.findAll().isEmpty()){
+           asyncFilaService.expirarPublicacao();
+        }
+
+    }
+
     @GetMapping("/inactive/{id}")
     public ResponseEntity getInactiveTypeUsers(@PathVariable int id){
 
-        List<UserService> devs = userServiceRepository.findByUserDevIdUserAndServiceActiveServiceFalse(id);
-        List<UserService> clients = userServiceRepository.findByUserCltIdUserAndServiceActiveServiceFalse(id);
+        Integer progressInitiated = 0;
+        List<UserService> devs = userServiceRepository
+                .findByUsersDevIdUserAndServiceActiveServiceFalseAndServiceProgress(id, progressInitiated);
+        List<UserService> clients = userServiceRepository
+                .findByUsersCltIdUserAndServiceActiveServiceFalseAndServiceProgress(id, progressInitiated);
 
-        boolean isDev = userServiceRepository.existsByUserDevIdUserAndUserDevRoleEquals(id, "dev");
-        boolean isClt = userServiceRepository.existsByUserCltIdUserAndUserCltRoleEquals(id, "clt");
+        boolean isDev = userServiceRepository.existsByUsersDevIdUserAndUsersDevRoleEquals(id, "dev");
+        boolean isClt = userServiceRepository.existsByUsersCltIdUserAndUsersCltRoleEquals(id, "clt");
+
+
 
         if (isDev){
             return ResponseEntity.ok(devs);
@@ -77,7 +110,9 @@ public class ServiceController {
 
     @GetMapping("/inactive")
     public ResponseEntity getAllInactiveServices(){
-        List<UserService> inactiveServices = userServiceRepository.findByServiceActiveServiceFalse();
+        Integer progressInitiated = 0;
+        List<UserService> inactiveServices = userServiceRepository
+                .findByServiceActiveServiceFalseAndServiceProgress(progressInitiated);
         if (inactiveServices.isEmpty()){
             return ResponseEntity.status(204).build();
         } else {
@@ -88,11 +123,11 @@ public class ServiceController {
     @GetMapping("/active/{id}")
     public ResponseEntity getActiveTypeUsers(@PathVariable int id){
 
-        List<UserService> devs = userServiceRepository.findByUserDevIdUserAndServiceActiveServiceTrue(id);
-        List<UserService> clients = userServiceRepository.findByUserCltIdUserAndServiceActiveServiceTrue(id);
+        List<UserService> devs = userServiceRepository.findByUsersDevIdUserAndServiceActiveServiceTrue(id);
+        List<UserService> clients = userServiceRepository.findByUsersCltIdUserAndServiceActiveServiceTrue(id);
 
-        boolean isDev = userServiceRepository.existsByUserDevIdUserAndUserDevRoleEquals(id, "dev");
-        boolean isClt = userServiceRepository.existsByUserCltIdUserAndUserCltRoleEquals(id, "clt");
+        boolean isDev = userServiceRepository.existsByUsersDevIdUserAndUsersDevRoleEquals(id, "dev");
+        boolean isClt = userServiceRepository.existsByUsersCltIdUserAndUsersCltRoleEquals(id, "clt");
 
         if (isDev){
             return ResponseEntity.ok(devs);
@@ -119,12 +154,12 @@ public class ServiceController {
 
         Integer progressFinished = 100;
         List<UserService> devs = userServiceRepository
-                .findByUserDevIdUserAndServiceActiveServiceFalseAndServiceProgress(id, progressFinished);
+                .findByUsersDevIdUserAndServiceActiveServiceFalseAndServiceProgress(id, progressFinished);
         List<UserService> clients = userServiceRepository
-                .findByUserCltIdUserAndServiceActiveServiceFalseAndServiceProgress(id, progressFinished);
+                .findByUsersCltIdUserAndServiceActiveServiceFalseAndServiceProgress(id, progressFinished);
 
-        boolean isDev = userServiceRepository.existsByUserDevIdUserAndUserDevRoleEquals(id, "dev");
-        boolean isClt = userServiceRepository.existsByUserCltIdUserAndUserCltRoleEquals(id, "clt");
+        boolean isDev = userServiceRepository.existsByUsersDevIdUserAndUsersDevRoleEquals(id, "dev");
+        boolean isClt = userServiceRepository.existsByUsersCltIdUserAndUsersCltRoleEquals(id, "clt");
 
         if (isDev){
             return ResponseEntity.ok(devs);
@@ -138,9 +173,9 @@ public class ServiceController {
 
     @GetMapping("/finished")
     public ResponseEntity getAllFinishedServices(){
-        Integer finishedService = 100;
+        Integer progressFinished = 100;
         List<UserService> finishedServices = userServiceRepository
-                .findByServiceActiveServiceFalseAndServiceProgress(finishedService);
+                .findByServiceActiveServiceFalseAndServiceProgress(progressFinished);
         if (finishedServices.isEmpty()){
             return ResponseEntity.status(204).build();
         } else {
@@ -150,17 +185,36 @@ public class ServiceController {
 
     @GetMapping
     public ResponseEntity getAllServices(){
-        if (repository.findAll().isEmpty()){
+        if (serviceRepository.findAll().isEmpty()){
             return ResponseEntity.status(204).build();
         } else {
-            return ResponseEntity.ok(repository.findAll());
+            return ResponseEntity.ok(serviceRepository.findAll());
         }
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity findByIdService(@PathVariable Integer id) {
-        if (repository.findById(id).isPresent()) {
-            return ResponseEntity.ok(repository.findById(id));
+        if (serviceRepository.findById(id).isPresent()) {
+            return ResponseEntity.ok(serviceRepository.findById(id));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/{idService}/user/{idUser}")
+    public ResponseEntity findByIdServiceAndIdUser(@PathVariable Integer idService,
+                                                   @PathVariable Integer idUser) {
+
+        UserService dev = userServiceRepository.findByServiceIdServiceAndUsersCltIdUser(idService, idUser);
+        UserService client = userServiceRepository.findByServiceIdServiceAndUsersDevIdUser(idService, idUser);
+
+        boolean isDev = userServiceRepository.existsByUsersDevIdUserAndUsersDevRoleEquals(idUser, "dev");
+        boolean isClt = userServiceRepository.existsByUsersCltIdUserAndUsersCltRoleEquals(idUser, "clt");
+
+        if (isDev){
+            return ResponseEntity.ok(client);
+        } else if (isClt){
+            return ResponseEntity.ok(dev);
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -168,9 +222,12 @@ public class ServiceController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity putServices(@Valid @PathVariable Integer id, @RequestBody Service service) {
-        if (repository.existsById(id)) {
+        if (serviceRepository.existsById(id)) {
             service.setIdService(id);
-            repository.save(service);
+            if(service.getProgress() >= 100){
+                service.setActiveService(false);
+            }
+            serviceRepository.save(service);
             return ResponseEntity.created(null).build();
         } else {
             return ResponseEntity.noContent().build();
@@ -179,8 +236,9 @@ public class ServiceController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteServices(@PathVariable Integer id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
+        if (userServiceRepository.existsById(id)) {
+            userServiceRepository.deleteById(id);
+            serviceRepository.deleteById(id);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.noContent().build();
@@ -197,12 +255,12 @@ public class ServiceController {
 //        servicesFilter.setDescriptionService(descriptionService);
 //        servicesFilter.setTag(tag);
 //
-//        Optional<User> users = registerUser.findByIdUser(idUser);
+//        Optional<Users> users = registerUser.findByIdUser(idUser);
 //        if(!users.isPresent()){
 //            return ResponseEntity.badRequest().body("Não foi possível realizar a consulta. " +
 //                    "Usuário não encontrado pelo id informado");
 //        } else {
-//            servicesFilter.setUser((User) users.get());
+//            servicesFilter.setUser((Users) users.get());
 //        }
 //        List<Service> services = registerServices.search(servicesFilter);
 //        return ResponseEntity.ok(services);

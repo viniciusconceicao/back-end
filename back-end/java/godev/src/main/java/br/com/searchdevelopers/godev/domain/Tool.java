@@ -19,7 +19,7 @@ public class Tool {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
-    private User user;
+    private Users users;
 
     public Integer getIdTool() {
         return idTool;
@@ -37,11 +37,11 @@ public class Tool {
         this.nameTool = nameTool;
     }
 
-    public User getUsers() {
-        return user;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUsers(User user) {
-        this.user = user;
+    public void setUsers(Users users) {
+        this.users = users;
     }
 }

@@ -1,6 +1,6 @@
 package br.com.searchdevelopers.godev.usecases.exportdownload;
 
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class ExportService {
 
-    public String exportUsers(List<User> lista, String tipoArquivo) {
+    public String exportUsers(List<Users> lista, String tipoArquivo) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");
         StringBuilder corpo = new StringBuilder();
         LocalDateTime now = LocalDateTime.now();
@@ -23,20 +23,20 @@ public class ExportService {
             headerDoc = String.format("%s %-8s %-19s %02d %n", "00", "USUÁRIOS", now.format(dateTimeFormatter), 1);
         }
         corpo.append(headerDoc);
-        for (User user : lista) {
-            String nome = user.getNameUser();
+        for (Users users : lista) {
+            String nome = users.getNameUser();
             String tipoDoc;
             String numeroDoc;
-            String email = user.getEmail();
-            String telefone = user.getPhone();
-            String tipoUsuario = user.getRole();
+            String email = users.getEmail();
+            String telefone = users.getPhone();
+            String tipoUsuario = users.getRole();
             registros++;
-            if (!(user.getCnpj() == null)) {
+            if (!(users.getCnpj() == null)) {
                 tipoDoc = "01";
-                numeroDoc = user.getCnpj();
+                numeroDoc = users.getCnpj();
             } else {
                 tipoDoc = "02";
-                numeroDoc = user.getCpf();
+                numeroDoc = users.getCpf();
             }
 
 

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface FavoriteRepository extends JpaRepository<Favorite,Integer> {
 
-    boolean existsByUserDevIdUserAndUserDevRoleEquals (Integer idUser, String role);
-    boolean existsByUserCltIdUserAndUserCltRoleEquals (Integer idUser, String role);
+    boolean existsByUsersDevIdUserAndUsersDevRoleEquals (Integer idUser, String role);
+    boolean existsByUsersCltIdUserAndUsersCltRoleEquals (Integer idUser, String role);
 
-    List<Favorite> findByUserCltIdUserAndFavoriteTrue(Integer idUserClt);
-    List<Favorite> findByUserDevIdUserAndFavoriteTrue(Integer idUserDev);
+    List<Favorite> findByUsersCltIdUserAndFavoriteTrue(Integer idUserClt);
+    List<Favorite> findByUsersDevIdUserAndFavoriteTrue(Integer idUserDev);
 }

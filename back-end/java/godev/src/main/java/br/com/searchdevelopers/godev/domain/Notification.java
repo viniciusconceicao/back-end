@@ -1,12 +1,10 @@
 package br.com.searchdevelopers.godev.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -33,13 +31,23 @@ public class Notification {
     private LocalDateTime dateCreated;
 
     @ManyToOne
-    @JoinColumn(name = "fk_user_s")
-    private  User userS;
+    @JoinColumn(name = "fk_user_sender")
+    private Users usersSender;
 
     @ManyToOne
-    @JoinColumn(name = "fk_user_r")
-    private  User userR;
+    @JoinColumn(name = "fk_user_receiver")
+    private Users usersReceiver;
 
+    public Notification(String typeNotification, String title, Boolean statusNotification, Users usersSender, Users usersReceiver) {
+        this.typeNotification = typeNotification;
+        this.title = title;
+        this.statusNotification = statusNotification;
+        this.usersSender = usersSender;
+        this.usersReceiver = usersReceiver;
+    }
+
+    public Notification() {
+    }
 
     public Integer getIdNotification() {
         return idNotification;
@@ -81,19 +89,19 @@ public class Notification {
         this.title = title;
     }
 
-    public User getUserS() {
-        return userS;
+    public Users getUsersSender() {
+        return usersSender;
     }
 
-    public void setUserS(User user) {
-        this.userS = user;
+    public void setUsersSender(Users usersSender) {
+        this.usersSender = usersSender;
     }
 
-    public User getUserR() {
-        return userR;
+    public Users getUsersReceiver() {
+        return usersReceiver;
     }
 
-    public void setUserR(User userR) {
-        this.userR = userR;
+    public void setUsersReceiver(Users usersReceiver) {
+        this.usersReceiver = usersReceiver;
     }
 }

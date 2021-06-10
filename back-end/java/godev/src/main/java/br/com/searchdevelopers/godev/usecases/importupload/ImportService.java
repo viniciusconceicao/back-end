@@ -2,6 +2,13 @@ package br.com.searchdevelopers.godev.usecases.importupload;
 
 import br.com.searchdevelopers.godev.domain.Experience;
 import br.com.searchdevelopers.godev.domain.Formation;
+import br.com.searchdevelopers.godev.repository.ExperienceRepository;
+import br.com.searchdevelopers.godev.repository.FormationRepository;
+import br.com.searchdevelopers.godev.usecases.fila.FilaObj;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 import java.io.BufferedReader;
@@ -12,12 +19,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ImportService {
 
-    List<Experience> listaExperiencia = new ArrayList<>();
-    List<Formation> listaFormacao = new ArrayList<>();
+    @Autowired
+    private ExperienceRepository experienceRepository;
 
-    public void leArquivo(String nomeArq) {
+    @Autowired
+     private FormationRepository formationRepository;
+
+    List<Object> formationExperienceDtoList = new ArrayList<>();
+    //FormationExperienceDto formationExperienceDto = new FormationExperienceDto();
+    public FilaObj<Experience> filaExperiencia = new FilaObj<>(30);
+    public FilaObj<Formation> filaFormacao = new FilaObj<>(30);
+
+    public List<Object> leArquivo(String nomeArq) {
         BufferedReader entrada = null;
         String registro;
         String tipoRegistro;
@@ -41,7 +57,7 @@ public class ImportService {
             while (registro != null) {
 
 
-                // Obtém o tipo do registro
+                        // Obtém o tipo do registro
                 tipoRegistro = registro.substring(0, 2); // obtém os 2 primeiros caracteres do registro
 
 
@@ -82,11 +98,13 @@ public class ImportService {
                     }
 
 
-                    String nomeEmpresa = registro.substring(1,72).trim();
+                    String nomeEmpresa = registro.substring(2,72).trim();
                     String dataInicio = registro.substring(72,82).trim();
                     String dataFim = registro.substring(82,92).trim();
                     String descricao = registro.substring(92,291).trim();
-
+                    String position = registro.substring(292,361).trim();
+                    String functions = registro.substring(362,432).trim();
+                    String locality = registro.substring(433,533).trim();
 
 
 
@@ -96,10 +114,17 @@ public class ImportService {
 
 
 
-                    System.out.printf("%-2s%-70s%-10s%-10s%-200s\n", tipoRegistro, nomeEmpresa, conversaoDataInicio, conversaoDatafim,descricao);
+                    System.out.printf("%-2s%-70s%-10s%-10s%-200s%70s%70s%100s\n", tipoRegistro, nomeEmpresa, conversaoDataInicio, conversaoDatafim,descricao,
+                           position, functions, locality);
                     contRegistro++;
 
-                    listaExperiencia.add(new Experience(nomeEmpresa, conversaoDataInicio, conversaoDatafim,descricao));
+                    Experience experience = new Experience(nomeEmpresa, conversaoDataInicio, conversaoDatafim,descricao, position, functions, locality);
+                    //formationExperienceDto.setExperience(experience);
+                    formationExperienceDtoList.add(new Experience(nomeEmpresa, conversaoDataInicio, conversaoDatafim,descricao, position, functions, locality));
+                    filaExperiencia.insert(experience);
+                    //experienceRepository.save(experience);
+
+
 
 
                     }
@@ -118,6 +143,7 @@ public class ImportService {
                     String dataFim = registro.substring(102,112).trim();
                     String linguagem = registro.substring(112,131).trim();
 
+
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate conversaoDataInicio = LocalDate.parse(dataInicio,formatter);
                     LocalDate conversaoDatafim = LocalDate.parse(dataFim,formatter);
@@ -125,14 +151,18 @@ public class ImportService {
                     System.out.printf("%-2s%-50s%-40s%-10s%-10s%-20s\n",tipoRegistro, nomeInstituicao, curso, dataInicio, dataFim,
                             linguagem);
                      contRegistro++;
-                     listaFormacao.add(new Formation(nomeInstituicao,curso,linguagem,conversaoDataInicio, conversaoDatafim));
+
+                    Formation formation = new Formation(nomeInstituicao, curso, linguagem, conversaoDataInicio, conversaoDatafim);
+                    //formationExperienceDto.setFormation(formation);
+                    formationExperienceDtoList.add(new Formation(nomeInstituicao, curso, linguagem, conversaoDataInicio, conversaoDatafim));
+                    filaFormacao.insert(formation);
+                    //formationRepository.save(formation);
 
                 }
 
                 else {
                     System.out.println("Tipo de registro inválido");
                 }
-
 
                 // lê o próximo registro
                 registro = entrada.readLine();
@@ -143,9 +173,16 @@ public class ImportService {
         } catch (IOException e) {
             System.err.printf("Erro ao ler arquivo: %s.\n", e.getMessage());
         }
+       // cadastrar();
+        return formationExperienceDtoList;
 
     }
 
-}
+
+
+    }
+
+
+
 
 

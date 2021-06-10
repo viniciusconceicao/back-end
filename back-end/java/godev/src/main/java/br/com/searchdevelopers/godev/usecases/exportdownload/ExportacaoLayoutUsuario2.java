@@ -1,6 +1,6 @@
 package br.com.searchdevelopers.godev.usecases.exportdownload;
 
-import br.com.searchdevelopers.godev.domain.User;
+import br.com.searchdevelopers.godev.domain.Users;
 import br.com.searchdevelopers.godev.usecases.ListaObj;
 
 import java.io.FileWriter;
@@ -12,7 +12,7 @@ import java.util.FormatterClosedException;
 
 public class ExportacaoLayoutUsuario2 {
 
-    public void executarTxt(ListaObj<User> list) {
+    public void executarTxt(ListaObj<Users> list) {
         FileWriter arq = null;
         Formatter saida = null;
         StringBuilder conteudo;
@@ -34,20 +34,20 @@ public class ExportacaoLayoutUsuario2 {
         conteudo.append(String.format("%s%-8s%-19s%02d%n", "00", "USUÁRIOS", now.format(dateTimeFormatter), 1));
         try {
             for (int i = 0; i < list.getTamanho(); i++) {
-                User user = list.getElemento(i);
-                nome = user.getNameUser();
-                email = user.getEmail();
-                telefone = user.getPhone();
-                tipoUsuario = user.getRole();
+                Users users = list.getElemento(i);
+                nome = users.getNameUser();
+                email = users.getEmail();
+                telefone = users.getPhone();
+                tipoUsuario = users.getRole();
 
-                if (!user.getCnpj().isEmpty()) {
+                if (!users.getCnpj().isEmpty()) {
                     tipoDocumento = "01";
-                    nroDocumento = user.getCnpj();
+                    nroDocumento = users.getCnpj();
 
 
                 } else {
                     tipoDocumento = "02";
-                    nroDocumento = user.getCpf();
+                    nroDocumento = users.getCpf();
                 }
 
                 registros++;
@@ -86,7 +86,7 @@ public class ExportacaoLayoutUsuario2 {
     }
 
 
-    public void executarCsv(ListaObj<User> list){
+    public void executarCsv(ListaObj<Users> list){
         FileWriter arq = null;
         Formatter saida = null;
         StringBuilder conteudo;
@@ -108,20 +108,20 @@ public class ExportacaoLayoutUsuario2 {
         conteudo.append(String.format("%s%-8s%-19s%02d%n", "00", "USUÁRIOS", now.format(dateTimeFormatter), 1));
         try {
             for (int i = 0; i < list.getTamanho(); i++) {
-                User user = list.getElemento(i);
-                nome = user.getNameUser();
-                email = user.getEmail();
-                telefone = user.getPhone();
-                tipoUsuario = user.getRole();
+                Users users = list.getElemento(i);
+                nome = users.getNameUser();
+                email = users.getEmail();
+                telefone = users.getPhone();
+                tipoUsuario = users.getRole();
 
-                if (!user.getCnpj().isEmpty()) {
+                if (!users.getCnpj().isEmpty()) {
                     tipoDocumento = "01";
-                    nroDocumento = user.getCnpj();
+                    nroDocumento = users.getCnpj();
 
 
                 } else {
                     tipoDocumento = "02";
-                    nroDocumento = user.getCpf();
+                    nroDocumento = users.getCpf();
                 }
 
                 registros++;

@@ -10,21 +10,33 @@ public class Network {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idNetwork;
 
-    @Size(max = 200)
-    private String facebook;
+    @Size(max = 100)
+    private String facebookName;
 
-    @Size(max = 200)
-    private String instagram;
+    @Size(max = 500)
+    private String facebookUrl;
 
-    @Size(max = 200)
-    private String linkedin;
+    @Size(max = 100)
+    private String instagramName;
 
-    @Size(max = 200)
-    private String github;
+    @Size(max = 500)
+    private String instagramUrl;
 
-    @OneToOne
+    @Size(max = 100)
+    private String linkedinName;
+
+    @Size(max = 500)
+    private String linkedinUrl;
+
+    @Size(max = 100)
+    private String githubName;
+
+    @Size(max = 500)
+    private String githubUrl;
+
+    @ManyToOne
     @JoinColumn(name = "users_id")
-    private User user;
+    private Users users;
 
     public Integer getIdNetwork() {
         return idNetwork;
@@ -34,43 +46,75 @@ public class Network {
         this.idNetwork = idNetwork;
     }
 
-    public String getFacebook() {
-        return facebook;
+    public String getFacebookName() {
+        return facebookName;
     }
 
-    public void setFacebook(String facebook) {
-        this.facebook = facebook;
+    public void setFacebookName(String facebookName) {
+        this.facebookName = facebookName;
     }
 
-    public String getInstagram() {
-        return instagram;
+    public String getFacebookUrl() {
+        return facebookUrl;
     }
 
-    public void setInstagram(String instagram) {
-        this.instagram = instagram;
+    public void setFacebookUrl(String facebookUrl) {
+        this.facebookUrl = facebookUrl;
     }
 
-    public String getLinkedin() {
-        return linkedin;
+    public String getInstagramName() {
+        return instagramName;
     }
 
-    public void setLinkedin(String linkedin) {
-        this.linkedin = linkedin;
+    public void setInstagramName(String instagramName) {
+        this.instagramName = instagramName;
     }
 
-    public String getGithub() {
-        return github;
+    public String getInstagramUrl() {
+        return instagramUrl;
     }
 
-    public void setGithub(String github) {
-        this.github = github;
+    public void setInstagramUrl(String instagramUrl) {
+        this.instagramUrl = instagramUrl;
     }
 
-    public User getUser() {
-        return user;
+    public String getLinkedinName() {
+        return linkedinName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setLinkedinName(String linkedinName) {
+        this.linkedinName = linkedinName;
+    }
+
+    public String getLinkedinUrl() {
+        return linkedinUrl;
+    }
+
+    public void setLinkedinUrl(String linkedinUrl) {
+        this.linkedinUrl = linkedinUrl;
+    }
+
+    public String getGithubName() {
+        return githubName;
+    }
+
+    public void setGithubName(String githubName) {
+        this.githubName = githubName;
+    }
+
+    public String getGithubUrl() {
+        return githubUrl;
+    }
+
+    public void setGithubUrl(String githubUrl) {
+        this.githubUrl = githubUrl;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
     }
 }

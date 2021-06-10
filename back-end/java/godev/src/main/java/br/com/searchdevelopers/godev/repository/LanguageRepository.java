@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface LanguageRepository extends JpaRepository<Language,Integer> {
 
-    List<Language> findByUserIdUser(Integer id);
+    List<Language> findByUsersIdUser(Integer id);
 }

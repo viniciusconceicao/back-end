@@ -21,31 +21,45 @@ public class Experience {
     @Size(max = 70)
     private String nameCompany;
 
-    @NotNull
+    @NotNull (message = "startDate está nulo")
     @Past
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDateExperience;
 
-    @NotNull
+    @NotNull(message = "endDate está nulo")
     @Past
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDateExperience;
 
-    @NotNull
-    @NotBlank
+    @NotBlank (message = "descrição não pode estar em branco")
     @Size(max = 200)
     private String descriptionExperience;
 
-    public Experience(String nameCompany, LocalDate startDateExperience, LocalDate endDateExperience, String descriptionExperience) {
+    @NotBlank (message = "")
+    @Size(max = 70)
+    private String position;
+
+    @NotBlank
+    @Size(max = 70)
+    private String functions;
+
+    @Size(max = 100)
+    private String locality;
+
+
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private Users users;
+
+    public Experience(String nameCompany, LocalDate startDateExperience, LocalDate endDateExperience, String descriptionExperience, String position, String functions, String locality) {
         this.nameCompany = nameCompany;
         this.startDateExperience = startDateExperience;
         this.endDateExperience = endDateExperience;
         this.descriptionExperience = descriptionExperience;
+        this.position = position;
+        this.functions = functions;
+        this.locality = locality;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    private User user;
 
     public Experience() {
     }
@@ -90,11 +104,50 @@ public class Experience {
         this.descriptionExperience = descriptionExperience;
     }
 
-    public User getUsers() {
-        return user;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUsers(User user) {
-        this.user = user;
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(String functions) {
+        this.functions = functions;
+    }
+
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    @Override
+    public String toString() {
+        return "Experience{" +
+                "idExperience=" + idExperience +
+                ", nameCompany='" + nameCompany + '\'' +
+                ", startDateExperience=" + startDateExperience +
+                ", endDateExperience=" + endDateExperience +
+                ", descriptionExperience='" + descriptionExperience + '\'' +
+                ", position='" + position + '\'' +
+                ", functions='" + functions + '\'' +
+                ", locality='" + locality + '\'' +
+                ", users=" + users +
+                '}';
     }
 }
