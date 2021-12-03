@@ -1,0 +1,33 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+iugu:
+  api:
+    token: AFEC68916DC4274E923FAA3FCE2E55EF4B19F957D40C23F39049451947AD5E90
+    account: 07366109AA6644B8BB51D9DC6EBC4D6D
+
+spring:
+
+  web:
+    resources:
+      static-locations: classpath:/public/
+
+  h2:
+    console:
+      enable: true
+
+  jpa:
+    show-sql: true
+    hibernate:
+        ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://searchdevelopers.database.windows.net:1433;database=godev;users=searchdevelopers@searchdevelopers;password={#Gfgrupo3};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: searchdevelopers
+    password: #Gfgrupo3

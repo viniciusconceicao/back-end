@@ -1,0 +1,8 @@
+00USUÁRIOS22-04-2021 10-09-2101
+02Ifood                                                                 2020-05-082009-05-20Analise Swot na equipe de infraestrutura para dimensionamento de máquinas virtuais                                                                                                                      Estágiario                                                             Analista de sistemas                                                  Av Haddock Lobo                                                                                     
+02Mercado Livre                                                         2013-05-082007-07-20Analista de requisitos voltado a Cloud                                                                                                                                                                  Engenheiro de Software                                                 Analista de sistemas                                                  Brás                                                                                                
+03Bandtec                                            Node Js                                2001-05-202010-05-20JavaScript          
+03Alura                                              Javascript                             2001-05-202010-05-20React Naative       
+03Udemy                                              React                                  2001-05-202010-05-20NodeJs              
+03Bandtec                                            Node Js                                2001-05-202010-05-20JavaScript          
+0102   
